@@ -15,12 +15,19 @@ export const db=firebase.firestore() // exportacion de la variable db = database
 
 // ------------- configuracion de firebase y firestore
 
+
+import i18n from '@/config/i18n' // importacion para la traduccion
+
+import Store from '@/Store' // importacion del Store de Vuex
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  i18n,
+  Store,
   components: { App },
   template: '<App/>'
 })
