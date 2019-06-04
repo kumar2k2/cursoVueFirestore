@@ -39,16 +39,16 @@
         </v-list-tile-action>
 
         <v-list-tile-content>
-          <v-list-tile-tile>
+          <v-list-tile-title>
             {{ item.title }}
-          </v-list-tile-tile>
+          </v-list-tile-title>
         </v-list-tile-content>
 
       </v-list-tile>  
 
       <v-divider/>
 
-      <v-list-tile @click='togglerDrawer'
+      <v-list-tile @click='togglerDrawer'>
 
         <v-list-tile-action>
           <v-icon>
@@ -57,10 +57,12 @@
         </v-list-tile-action>
 
         <v-list-tile-content>
-          <v-list-tile-tile>
+          <v-list-tile-title>
             {{ $t('navigation.close_menu') }}
-          </v-list-tile-tile>
+          </v-list-tile-title>
         </v-list-tile-content>
+
+      </v-list-tile>
 
     </v-list> 
     </v-navigation-drawer>
@@ -68,8 +70,10 @@
 </template>
 
 <script>
+import navigatioMixin from '@/mixins/navigation'
     export default {
         name: 'guest',
+        mixins:[navigatioMixin],
         data() {
         return {
           drawer: false,
@@ -79,12 +83,6 @@
             {title: this.$t('navigation.register'), icon:'account_circle', to:'/register'}
           ]          
           }         
-        },
-        methods: {
-            
-        },
-        props:{
-
         }
     }
 </script>

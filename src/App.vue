@@ -6,18 +6,21 @@
         <v-container class='mt-3 mb-3'>
           <router-view/>
         </v-container>
-      </v-content>   
+      </v-content> 
+      <app-footer/>  
     </v-app>
   </main>
 </template>
 
 <script>
 import guestNavigation from '@/navigations/guest'
+import AppFooter from '@/components/footer'
 
   export default {
     name: 'App',
     components:{
-      guestNavigation
+      guestNavigation,
+      AppFooter
     }
   }   
 </script>
