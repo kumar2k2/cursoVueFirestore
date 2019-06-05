@@ -16,7 +16,7 @@
 <script>
 import appsnackbar from './SnackBar'
 import AuthForm from '@/forms/Auth'
-import Store from '../Store/index.js' // importacion del Store de Vuex
+import Store from '../store/index.js' // importacion del Store de Vuex
 import {db} from '../main'
     export default {
         name: 'Register',
@@ -31,14 +31,14 @@ import {db} from '../main'
         },
         methods: {
           register (user) {
-            Store.dispatch('firebaseRegister', user)
+            Store.dispatch('firebaseRegister', user) // usuario registrado mas no guardado en la base de datos
               .then((userRegistered) => { 
                 const data = {
                   uid: userRegistered.user.uid,
                   email: user.email,
                   role: 'customer'
                 }
-                db.collection('users').doc(userRegistered.user.uid).set(data).then(() => {                  
+                db.collection('users').doc(userRegistered.user.uid).set(data).then(() => {      // agregar usuario a base de datos            
                   Store.commit('setRole', data.role);                  
                   this.$router.push('/');
                 });

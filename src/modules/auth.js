@@ -40,9 +40,9 @@ export default{
         },
         role:(state)=>{
            return state.role 
+        },
+        isCustomer:(state)=>{
+            return state.role === 'customer'
         }
-    },
-    isCustomer:(state)=>{
-        return state.role==='customer'
-    }
+    }    
 }

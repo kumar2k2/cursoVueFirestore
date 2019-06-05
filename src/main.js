@@ -16,9 +16,9 @@ export const db = firebase.firestore() // exportacion de la variable db = databa
 // ------------- configuracion de firebase y firestore
 
 
-import i18n from '@/config/i18n' // importacion para la traduccion
+import i18n from './config/i18n' // importacion para la traduccion
 
-import Store from '@/Store' // importacion del Store de Vuex
+import Store from './store/index' // importacion del Store de Vuex
 
 require('./config/vuetify') // aplicacion dee stilos con vuetify
 
@@ -30,8 +30,22 @@ new Vue({
   router,
   i18n,
   Store,
-  components: {
-    App
-  },
-  template: '<App/>'
-})
+  components: { App },
+  template: '<App/>',
+  mounted () {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        db.collection('users').doc(user.uid).onSnapshot(snapshot => {
+          Store.commit('setUser', user);
+          if (snapshot.exists) {
+            Store.commit('setRole', snapshot.data().role);            
+          }
+          Store.commit('setLoaded', true);
+        })
+      } else {
+        Store.commit('setLoaded', true);
+      }
+    })
+  }
+});
+

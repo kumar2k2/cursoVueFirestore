@@ -13,7 +13,7 @@
 <script>
 import appsnackbar from './SnackBar'
 import AuthForm from '@/forms/Auth'
-import Store from '../Store/index.js' // importacion del Store de Vuex
+import Store from '../store/index.js' // importacion del Store de Vuex
 import {db} from '../main'
 
     export default {
@@ -21,18 +21,18 @@ import {db} from '../main'
         Store,
         components:{AuthForm, appsnackbar},
         data() {
-        return {
-            snackBar:false,
-            message:'',
-            timeout:5000            
-        }
+          return {
+              snackBar:false,
+              message:'',
+              timeout:5000            
+          }
         },
         methods: {
           login(user){
             Store.dispatch('firebaseLogin',user)
               .then(data=>{                
                 db.collection('users').doc(data.user.uid).onSnapshot(snapshot=>{          
-                  Store.commit('setRole',snapshot.data().role)
+                  
                   this.$router.push('/')
                 })
               })
