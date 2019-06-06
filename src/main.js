@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
+import Store from './store' // importacion del Store de Vuex
 
 // ------------- configuracion de firebase y firestore
 
@@ -18,7 +18,7 @@ export const db = firebase.firestore() // exportacion de la variable db = databa
 
 import i18n from './config/i18n' // importacion para la traduccion
 
-import Store from './store/index' // importacion del Store de Vuex
+
 
 require('./config/vuetify') // aplicacion dee stilos con vuetify
 
