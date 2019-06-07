@@ -35,7 +35,7 @@ import { mapGetters } from 'vuex' // ns permite acceder a los valores de los get
       AppFooter,
       adminNavigation
     },
-    computed: {
+    computed: {      
       userRole(){
         return Store.state.authModule.role  // probar mapGetters para acceder a los getters 
       },

@@ -22,7 +22,7 @@ export default new Vuex.Store({
         setLoaded:(state, loaded)=>{
             state.loaded= loaded
         },
-        setAletMessagge:(state,data)=>{
+        setAlertMessage:(state,data)=>{
             state.alert.type=data.type    
             state.alert.show=data.show 
             state.alert.message=data.message

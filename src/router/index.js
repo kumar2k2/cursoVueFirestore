@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home'
 import adminHome from '@/components/administration/adminHome'
+import adminUsers from '@/components/administration/adminUsers'
 import Register from '@/components/Register'
 import Login from '@/components/login'
 import Store from '../store/index.js' // importacion del Store de Vuex
@@ -42,7 +43,14 @@ const router =  new Router({
       path:'/admin',
       name:'Admin',
       component: adminHome,
-      meta: {Auth: true, title: 'Admin', role: 'admin'} 
+      meta: {Auth: true, title: 'Admin', role: 'admin'},
+      children:[
+        {
+          path:'users',          
+          component: adminUsers,
+          meta: {title: 'Users', role: 'admin'},
+        }
+      ]
     }  
   ]
 })

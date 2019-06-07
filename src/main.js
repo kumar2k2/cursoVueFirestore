@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Store from './store' // importacion del Store de Vuex
+import Store from './store/index' // importacion del Store de Vuex
 
 // ------------- configuracion de firebase y firestore
 
@@ -29,7 +29,6 @@ new Vue({
   el: '#app',
   router,
   i18n,
-  Store,
   components: { App },
   template: '<App/>',
   mounted () {

@@ -22,6 +22,11 @@
         </v-list>
       </v-navigation-drawer>
     </v-flex>
+
+    <v-flex xs12 sm9 style='margin-left: 15px'>
+      <router-view/>
+    </v-flex>
+    
   </v-layout>
 </template>
 
@@ -31,8 +36,8 @@
         data() {
           return {
             items:[
-              {title:this.$t('admin.products'), icon: 'shopping_basket', to:'/admin/products'},
-              {title:this.$t('admin.users'), icon: 'face', to:'/admin/users'}              
+              {title:this.$t('admin.users'), icon: 'face', to:'/admin/users'},
+              {title:this.$t('admin.products'), icon: 'shopping_basket', to:'/admin/products'}                         
             ]
           }
         },
