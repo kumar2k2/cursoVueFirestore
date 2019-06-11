@@ -1,49 +1,56 @@
 <template>
-  <main>    
+  <main>
     <v-app>
-      <v-content v-if='isLoaded'>
-        <guestNavigation v-if="userRole === 'customer'"/>
-        <guestNavigation v-if="userRole === 'guest'"/>
-        <adminNavigation v-if="userRole === 'admin'"/>
-        <v-container class='mt-3 mb-3'>     
-          <router-view/>
+      <v-content v-if="$store.state.loaded">
+
+        <guest-navigation v-if="role === 'guest'" />
+        <admin-navigation v-if="role === 'admin'" />
+        <customer-navigation v-if="role === 'customer'" />
+
+        <v-container class="mt-3 mb-3">
+
+          <v-alert
+            :type="$store.state.alert.type"
+            :value="$store.state.alert.show"
+          >
+            {{ $store.state.alert.message }}
+          </v-alert>
+
+          <router-view />
         </v-container>
-      </v-content> 
+
+        <app-footer />
+
+      </v-content>
+
       <v-container v-else fill-height>
         <v-layout flex align-center justify-center>
-          <v-progress-circular indeterminate :size='100' :width='10' color='purple'/>
+          <v-progress-circular indeterminate :size="100" :width="10" color="purple" />
         </v-layout>
       </v-container>
-      <app-footer/>  
+
     </v-app>
   </main>
 </template>
 
 <script>
-
-import guestNavigation from '@/navigations/guest'
-import adminNavigation from '@/navigations/admin'
-import AppFooter from '@/components/footer'
-import Store from './store/index' // importacion del Store de Vuex
-import { mapGetters } from 'vuex' // ns permite acceder a los valores de los getter de un store
-
+  import GuestNavigation from '@/navigations/guest';
+  import AppFooter from "@/components/Footer";
+  import AdminNavigation from "@/navigations/admin";
+  import {mapGetters} from 'vuex';
+  import CustomerNavigation from "@/navigations/customer";
   export default {
-    name: 'App',    
-    Store,
-    components:{
-      guestNavigation,
+    components: {
+      CustomerNavigation,
+      AdminNavigation,
       AppFooter,
-      adminNavigation
+      GuestNavigation
     },
-    computed: {      
-      userRole(){
-        return Store.state.authModule.role  // probar mapGetters para acceder a los getters 
-      },
-      isLoaded () {
-        return Store.state.loaded === true
-      }            
+    name: 'App',
+    computed: {
+      ...mapGetters(['role'])
     }
-  }   
+  }
 </script>
 
 <style>

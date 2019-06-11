@@ -12,16 +12,15 @@
 </template>
 
 <script>
-    export default {
-        name: 'app-snack-bar',
-        data() {
-        return {
-          color:'primary',
-          mode:'horizontal',
-          showSnack:this.snackBar
-        }
-        },
-        props:['snackBar','timeout','text']
+	export default {
+		name: "app-snack-bar",
+    props: ['snackBar', 'timeout', 'text'],
+    data () {
+		  return {
+		    color: 'primary',
+        mode: 'horizontal',
+        showSnack: this.snackBar
+      }
     }
+	}
 </script>
-

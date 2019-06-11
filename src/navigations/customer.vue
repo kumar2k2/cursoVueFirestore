@@ -3,13 +3,16 @@
     <v-toolbar app dark color="primary">
       <v-toolbar-side-icon @click="toggleDrawer" />
       <v-toolbar-title>
-        <v-btn color="dark" to="/">Vuejs 2 Firestore</v-btn>
+        <v-btn color="dark" to="/">
+          Vuejs 2 Firestore
+        </v-btn>
       </v-toolbar-title>
-
       <v-spacer />
-
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat to="/admin">{{ $t('navigation.admin') }}</v-btn>
+        <v-btn flat to="/orders">{{ $t('navigation.orders') }}</v-btn>
+        <v-btn flat to="/cart">
+          {{ $t('navigation.products_in_cart', {number: $store.state.cartModule.totalProducts}) }}
+        </v-btn>
         <v-btn flat to="/shop">{{ $t('navigation.shop') }}</v-btn>
         <v-btn flat @click="logout">{{ $t('navigation.logout') }}</v-btn>
       </v-toolbar-items>
@@ -21,10 +24,7 @@
       absolute
       value=""
     >
-      <v-list
-        class="pt-0"
-        dense
-      >
+      <v-list class="pt-0" dense>
         <v-divider />
         <v-list-tile
           v-for="(item, index) in items"
@@ -64,7 +64,6 @@
         </v-list-tile>
 
       </v-list>
-
     </v-navigation-drawer>
   </div>
 </template>
@@ -72,15 +71,16 @@
 <script>
   import navigationMixin from '@/mixins/navigation';
   export default {
-    name: "admin-navigation",
+    name: "customer-navigation",
     mixins: [navigationMixin],
     data () {
       return {
         drawer: false,
         items: [
-          { title: this.$t('navigation.admin'), icon: 'store', to: '/admin' },
           { title: this.$t('navigation.home'), icon: 'home', to: '/' },
           { title: this.$t('navigation.shop'), icon: 'shopping_basket', to: '/shop' },
+          { title: this.$t('navigation.cart'), icon: 'shopping_cart', to: '/cart' },
+          { title: this.$t('navigation.orders'), icon: 'view_headline', to: '/orders' },
         ]
       }
     }

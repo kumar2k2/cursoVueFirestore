@@ -1,75 +1,116 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home'
-import adminHome from '@/components/administration/adminHome'
-import adminUsers from '@/components/administration/adminUsers'
-import Register from '@/components/Register'
-import Login from '@/components/login'
-import Store from '../store/index.js' // importacion del Store de Vuex
+import Home from '@/components/Home';
+import Register from '@/components/Register';
+import Login from '@/components/Login';
 
-Vue.use(Router)
+import AdminHome from '@/components/administration/AdminHome';
+import AdminUsers from '@/components/administration/AdminUsers';
+import AdminProducts from '@/components/administration/AdminProducts';
+import AdminChartOrders from '@/components/administration/AdminChartOrders';
 
-const beforeEnter=(to,from,next)=>{ // no accede a la ruta si el usuario esta logueado
-  if(Store.state.authModule.logged){
-    next({path:'/'})
-  }else{
-    next()
+import Products from '@/components/shop/Products';
+import Cart from '@/components/Cart';
+import Orders from '@/components/orders/Orders';
+import OrderDetail from '@/components/orders/OrderDetail';
+
+Vue.use(Router);
+
+import store from '@/store';
+
+const beforeEnter = (to, from, next) => {
+  if (store.state.authModule.logged) {
+    next({path: '/'});
+  } else {
+    next();
   }
-}
+};
 
-const router =  new Router({
+const router = new Router({
   routes: [
     {
-      path:'/',
-      name:'Home',
+      path: '/',
+      name: 'Home',
       component: Home,
-      meta: {Auth: false, title: 'Inicio'} // indica que no requiere autenticacion y que el titulo de la paghina a mostrar es Inicio
+      meta: { Auth: false, title: 'Inicio' },
     },
     {
-      path:'/register',
-      name:'Register',
+      path: '/register',
+      name: 'Register',
       component: Register,
-      meta: {Auth: false, title: 'Registro'},
-      beforeEnter:(to,from,next)=>beforeEnter(to,from,next)
+      meta: { Auth: false, title: 'Registro' },
+      beforeEnter: (to, from, next) => beforeEnter(to, from, next)
     },
     {
-      path:'/login',
-      name:'Login',
+      path: '/login',
+      name: 'Login',
       component: Login,
-      meta: {Auth: false, title: 'Login'},
-      beforeEnter:(to,from,next)=>beforeEnter(to,from,next)
+      meta: { Auth: false, title: 'Iniciar sesión' },
+      beforeEnter: (to, from, next) => beforeEnter(to, from, next)
     },
     {
-      path:'/admin',
-      name:'Admin',
-      component: adminHome,
-      meta: {Auth: true, title: 'Admin', role: 'admin'},
-      children:[
+      path: '/admin',
+      name: 'Admin',
+      component: AdminHome,
+      meta: { Auth: true, title: 'Administración', role: 'admin' },
+      children: [
         {
-          path:'users',          
-          component: adminUsers,
-          meta: {title: 'Users', role: 'admin'},
+          path: 'users',
+          component: AdminUsers,
+          meta: { title: 'Adminstrar Usuarios' },
+        },
+        {
+          path: 'products',
+          component: AdminProducts,
+          meta: { title: 'Adminstrar Productos' },
+        },
+        {
+          path: 'chart_orders',
+          component: AdminChartOrders,
+          meta: { title: 'Gráfica de pedidos' },
         }
       ]
-    }  
+    },
+    {
+      path: '/shop',
+      name: 'Shop',
+      component: Products,
+      meta: { Auth: true, title: 'Tienda' },
+    },
+    {
+      path: '/cart',
+      name: 'Cart',
+      component: Cart,
+      meta: { Auth: true, title: 'Carrito' },
+    },
+    {
+      path: '/orders',
+      name: 'Orders',
+      component: Orders,
+      meta: { Auth: true, title: 'Pedidos' },
+    },
+    {
+      path: '/orders/:id',
+      name: 'OrderDetail',
+      component: OrderDetail,
+      meta: { Auth: true, title: 'Detalle del pedido' },
+    },
   ]
-})
+});
 
-router.beforeEach((to,from,next)=>{ 
-  document.title=to.meta.title // le asigna el titulo a la pagina tomandolo de los metadatos pasados por la ruta
-  if (to.meta.Auth && !Store.state.authModule.logged && Store.state.loaded){
-    next({path:'/login'}) // redirige al login por solicitar acceso sin estar logueado
-    console.log('me fui a login')
-  }else{
-    console.log('rol requerido', to.meta)
-    if(to.meta.role){      
-      if(Store.state.loaded && (to.meta.role !== Store.state.authModule.role)){
-        next({path:'/'}) // reditige al home por solicitar accedo auna pagina cuyo requerimiento de role no coincide con el del usuario logeado
-        return
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  if (to.meta.Auth && !store.state.authModule.logged && store.state.loaded) {
+    next({path: '/login'});
+  } else {
+    if (to.meta.role) {
+      if (store.state.loaded && (to.meta.role !== store.state.authModule.role)) {
+        next({path: '/'});
+        return;
       }
     }
-    next() // muestra la ruta solicitada
+    next();
   }
-})
+});
 
-export default router
+export default router;

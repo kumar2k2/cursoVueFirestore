@@ -10,10 +10,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "chart.js": "^2.8.0",
     "faker": "^4.1.0",
     "firebase": "^6.1.0",
     "moment": "^2.24.0",
     "vue": "^2.5.2",
+    "vue-chartjs": "^3.4.2",
     "vue-i18n": "^8.11.2",
     "vue-mugen-scroll": "^0.2.5",
     "vue-router": "^3.0.1",
