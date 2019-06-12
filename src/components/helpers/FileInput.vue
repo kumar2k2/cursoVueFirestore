@@ -63,25 +63,29 @@
 
     methods: {
       onPickFile () {
-        this.$refs.image.click()
+        this.$refs.image.click() // activar el input file
       },
 
       onFilePicked (event) {
-        const files = event.target.files || event.dataTransfer.files;
-
+        
+        const files = event.target.files || event.dataTransfer.files; // tomo tdos los archivos
+        
         if (files && files[0]) {
-          let filename = files[0].name;
+          let filename = files[0].name; // tomo el nombre
 
           if (filename && filename.lastIndexOf('.') <= 0) {
             return
           }
 
           const fileReader = new FileReader();
+          
           fileReader.addEventListener('load', () => {
             this.imageUrl = fileReader.result
+            
           });
 
           fileReader.readAsDataURL(files[0]);
+
 
           this.$emit('input', files[0]);
         }

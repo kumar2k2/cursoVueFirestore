@@ -26,7 +26,7 @@
         </v-chip>
       </span>
 
-      <v-btn icon @click="$emit('addToCart')" v-if="$store.getters.isCustomer">
+      <v-btn icon @click="$emit('addToCart')" v-if="$store.getters.isCustomer"> <!-- emite addToCar al padre cuando se hace click y solo se muestra cuando el ususario es custumer-->
         <v-icon>add_shopping_cart</v-icon>
       </v-btn>
 

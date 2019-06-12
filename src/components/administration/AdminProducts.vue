@@ -33,21 +33,21 @@
     name: "admin-products",
     data() {
       return {
-        headers: [
+        headers: [ // cabeceras de la tabla 
           {text: this.$t('admin.productsTable.id'), value: 'id', align: 'center'},
           {text: this.$t('admin.productsTable.name'), value: 'name', align: 'center'},
           {text: this.$t('admin.productsTable.price'), value: 'price', align: 'center'},
           {text: this.$t('common.actions'), value: 'name', sortable: false}
         ],
         products: [],
-        loading: true,
+        loading: true, // indica si se muestra el loading de la tabla o no
       }
     },
     mounted () {
       this.loading = true;
-      db.collection('products').orderBy('createdAt').onSnapshot(snapshot => {
+      db.collection('products').orderBy('createdAt').onSnapshot(snapshot => { // busca productos de la base de datos
         this.products = [];
-        snapshot.forEach(snapProduct => {
+        snapshot.forEach(snapProduct => { // se recorre el snapshot devuelto por la busqueda
           const product = snapProduct.data();
           this.products.push({
             id: product.id,
@@ -63,16 +63,16 @@
       })
     },
     methods: {
-      editProduct (product) {        
+      editProduct (product) {  //  abre la ventana modal de edicion activando el editMode  
         this.$store.commit('toggleProductsDialog', {editMode: true, product});
       },
-      removeProduct (product) {
+      removeProduct (product) { // borra el producto
         db.collection('products').doc(product.id).delete().then(() => {
-          if (product.url) {
+          if (product.url) { // pregunta si el producto tiene imagen para borrarla del storage
             this.$store.dispatch('removeFile', product);
           }
 
-          this.$store.commit('setAlertMessage', {
+          this.$store.commit('setAlertMessage', { // muestra la ventana de alerta
             show: true,
             type: 'success',
             message: this.$t('messages.deleted', {item: this.$t('common.product')}),

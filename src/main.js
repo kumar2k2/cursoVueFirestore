@@ -35,10 +35,10 @@ new Vue({
       if (user) {
         db.collection('users').doc(user.uid).onSnapshot(snapshot => {
           store.commit('setUser', user);
-          if (snapshot.exists) {
+          if (snapshot.exists) { // se verifica si existe el usuario
             store.commit('setRole', snapshot.data().role);
             if (snapshot.data().role === 'customer') {
-              store.dispatch('createCartIfNotExists', user);
+              store.dispatch('createCartIfNotExists', user); // se crea el carrito si no existe y su el usuarios es customer
             }
           }
           store.commit('setLoaded', true);

@@ -1,37 +1,37 @@
 import {db} from '@/main';
-const initialState = () => ({
-  cartId: null,
-  cart: [],
-  totalProducts: 0,
-  selectedProduct: null,
+const initialState = () => ({ // inicilizacion del estado
+  cartId: null, // id a guardar en la coleccion de cards
+  cart: [], // el carrito
+  totalProducts: 0, // total de productos
+  selectedProduct: null, // producto seleccionado que se muestra en la toad de abajo 
 });
 
 export default {
   state: initialState(),
   actions: {
-    createCartIfNotExists ({commit, state}, user) {
-      db.collection('carts').doc(user.uid).onSnapshot(cartSnap => {
+    createCartIfNotExists ({commit, state}, user) { // crear carro si no existe
+      db.collection('carts').doc(user.uid).onSnapshot(cartSnap => { // se consulta si el usuario ya tiene un carrito creado o asignado
         let cart;
-        if ( ! cartSnap.exists) {
-          cart = {
+        if ( ! cartSnap.exists) { // si no existe 
+          cart = { // la variable cart sera igual a un objeto que contendra los productos y el numero de productos
             products: [], totalProducts: 0
           };
-          db.collection('carts').doc(user.uid).set(cart);
+          db.collection('carts').doc(user.uid).set(cart); // crea el cart en la coleccion
         } else {
-          cart = cartSnap.data();
+          cart = cartSnap.data(); // si el cart existe lo hace igual a la data obtenida en la busqueda
         }
-        commit('setCart', {cart, cartId: user.uid});
+        commit('setCart', {cart, cartId: user.uid}); // se inicializa el estado del carro
       }, (error) => {
         console.log('listener cart off...');
       });
     },
-    updateCart ({commit, state}, data) {
-      let cart = db.collection('carts').doc(state.cartId);
-      const product = data.product;
+    updateCart ({commit, state}, data) { // actualizar el carrito, eliminar, añadir o cambiar catidad de un producto
+      let cart = db.collection('carts').doc(state.cartId);  // con esto se consigue el contenido del carrito en una variable
+      const product = data.product; // datos del producto a editar en el carrito
       cart.get().then((doc) => {
-        let cartData = doc.data();
-        let productsInCart = cartData.products;
-        const oldProductInCart = findProductByKey(productsInCart, 'id', product.id);
+        let cartData = doc.data(); // este seria el contenido del carrito
+        let productsInCart = cartData.products; // estos serian los productos dentro del carrito
+        const oldProductInCart = findProductByKey(productsInCart, 'id', product.id); // se busca un producto en le carrito, a ver si ya esta contenido
 
         if ( ! oldProductInCart) {
           if (data.type === 'increment') {
@@ -69,7 +69,7 @@ export default {
     }
   },
   mutations: {
-    setCart (state, data) {
+    setCart (state, data) { // se inicializa la data del estae del carrito (productos, cantidad de productos y el id del carrito)
       state.cart = data.cart.products;
       state.totalProducts = data.cart.totalProducts;
       state.cartId = data.cartId;
@@ -111,7 +111,7 @@ export default {
   }
 }
 
-const findProductByKey = (array, key, value) => {
+const findProductByKey = (array, key, value) => { // busca el producto por el id a ver si existe
   for (let i = 0; i < array.length; i++) {
     if (array[i][key] === value) {
       return array[i];
