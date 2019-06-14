@@ -28,60 +28,60 @@ export default {
     updateCart ({commit, state}, data) { // actualizar el carrito, eliminar, añadir o cambiar catidad de un producto
       let cart = db.collection('carts').doc(state.cartId);  // con esto se consigue el contenido del carrito en una variable
       const product = data.product; // datos del producto a editar en el carrito
-      cart.get().then((doc) => {
+      cart.get().then((doc) => { // se solicita el carrito respectivo
         let cartData = doc.data(); // este seria el contenido del carrito
         let productsInCart = cartData.products; // estos serian los productos dentro del carrito
         const oldProductInCart = findProductByKey(productsInCart, 'id', product.id); // se busca un producto en le carrito, a ver si ya esta contenido
 
-        if ( ! oldProductInCart) {
-          if (data.type === 'increment') {
-            productsInCart.push({
+        if ( ! oldProductInCart) { // No existe el rpoducto
+          if (data.type === 'increment') { // si el producto no esta en el carrito el tipo de variacion siempre debe ser increment
+            productsInCart.push({ // se agrega el carrito al arreglo de productos
               id: product.id,
               name: product.name,
-              qty: 1,
+              qty: 1, // la cantidad se coloca en uno
               price: product.price
             });
-            cartData.totalProducts += 1;
+            cartData.totalProducts += 1; // la cantidad de productos en el carrito aumenta en uno
           }
-        } else {
-          if (data.type === 'increment') {
-            oldProductInCart.qty += 1;
-            cartData.totalProducts += 1;
-          } else {
-            if ( oldProductInCart.qty === 1) {
-              const index = productsInCart.findIndex(obj => obj.id === product.id);
-              cartData.products = [
+        } else { // Si existe el producto
+          if (data.type === 'increment') { // si existe la variacion puede ser increment 
+            oldProductInCart.qty += 1; // aumenta en uno la cantidad del producto
+            cartData.totalProducts += 1; // aumenta en uno la cantidad de productos en el carrito
+          } else { // o decrement
+            if ( oldProductInCart.qty === 1) { // si la cantidad del producto es 1 y se decrementa
+              const index = productsInCart.findIndex(obj => obj.id === product.id); // se busca el indice del producto dentrol de array (la funcion esta al final de la hoja)
+              cartData.products = [ // se elimina el producto del array
                 ...productsInCart.slice(0, index),
                 ...productsInCart.slice(index + 1)
               ];
-              cartData.totalProducts -= 1;
-            } else {
-              oldProductInCart.qty -= 1;
-              cartData.totalProducts -= 1;
+              cartData.totalProducts -= 1; // el total de productos se disminuye en uno
+            } else { // si se decrementa y la cantidad es mayor a uno
+              oldProductInCart.qty -= 1; // se disminuye en uno la cantidad del producto
+              cartData.totalProducts -= 1; // se dismunuye en uno la cantidad de productos del carrito
             }
           }
         }
 
-        cart.update(cartData).then(() => {
+        cart.update(cartData).then(() => { // se actualiza el carrito con el 
           commit('updateCart', cartData);
         })
       })
     }
   },
   mutations: {
-    setCart (state, data) { // se inicializa la data del estae del carrito (productos, cantidad de productos y el id del carrito)
+    setCart (state, data) { // se inicializa la data del state del carrito (productos, cantidad de productos y el id del carrito)
       state.cart = data.cart.products;
       state.totalProducts = data.cart.totalProducts;
       state.cartId = data.cartId;
     },
-    updateCart (state, data) {
+    updateCart (state, data) { // actualiza productos en el carrito en el state
       state.cart = data.products;
       state.totalProducts = data.totalProducts;
     },
-    setActiveProductInCart (state, product) {
+    setActiveProductInCart (state, product) { // establece el producto seleccionado en el state
       state.selectedProduct = product;
     },
-    resetCart (state) {
+    resetCart (state) {  // resetea el state pero no elimina el ide del carrito en el state
       const initial = initialState();
       Object.keys(initial).forEach(key => {
         if (key !== 'cartId') {
@@ -91,19 +91,19 @@ export default {
     }
   },
   getters: {
-    qtyProductInCart: (state) => {
-      if ( ! state.selectedProduct) return 0;
-      const selectedProduct = state.cart.filter(obj => obj.id === state.selectedProduct.id)[0];
-      if (selectedProduct) {
-        return selectedProduct.qty;
+    qtyProductInCart: (state) => { // cantidad de produtos en un producto del carrito
+      if ( ! state.selectedProduct) return 0; // si no hay productos seleccionados
+      const selectedProduct = state.cart.filter(obj => obj.id === state.selectedProduct.id)[0]; // se busca el producto seleccioando
+      if (selectedProduct) { // si se consigue el producto
+        return selectedProduct.qty; // retorna la cantidad
       }
-      return 0;
+      return 0; // retorna cero si el producto no esta en el carrito
     },
-    totalCostCart: (state) => {
+    totalCostCart: (state) => { // monto total del carrito
       let totalCost = 0;
-      if (state.cart.length) {
-        state.cart.map(product => {
-          totalCost += parseFloat(product.price) * parseInt(product.qty);
+      if (state.cart.length) { // si el array del carrito en state tiene productos
+        state.cart.map(product => { // mapea todos los productos del array
+          totalCost += parseFloat(product.price) * parseInt(product.qty); // calculo del total
         })
       }
       return totalCost;

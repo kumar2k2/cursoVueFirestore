@@ -60,7 +60,7 @@
         type: Object,
         required: true
       },
-      sheet: {
+      sheet: { // se usa para saber si la hoja se mostrara o no
         type: Boolean,
         default: false
       }
@@ -69,13 +69,13 @@
 		  this.setActive(this.product);
     },
     methods: {
-      ...mapActions(['updateCart']),
-      ...mapMutations({
+      ...mapActions(['updateCart']), // toma la accion updateCar del modulo 
+      ...mapMutations({ // mapea las mutaciones, en este caso se asigna setActiveProductInCart a la variable setActive que se usa en mounted
         setActive: 'setActiveProductInCart'
       })
     },
     computed: {
-      ...mapGetters(['qtyProductInCart'])
+      ...mapGetters(['qtyProductInCart']) // cantidad de un producto en el carrito
     }
 	}
 </script>

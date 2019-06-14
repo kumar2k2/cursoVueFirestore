@@ -48,7 +48,7 @@
         </v-card>
 
       </v-flex>
-    </v-layout>
+    </v-layout> 
 
     <v-layout row>
       <infinite-scroll :handler="fetchProducts" :should-handle="!loading" />
@@ -65,6 +65,7 @@
   import InfiniteScroll from 'vue-mugen-scroll';
   import Product from './Product';
   import ProductSheet from './ProductSheet';
+
 	export default {
 		name: "products",
     components: {
@@ -72,46 +73,46 @@
     },
     data () {
 		  return {
-		    loading: false,
-        productSheet: {},
-        statusSheet: false
+		    loading: false, // cargando productos Datatable
+        productSheet: {}, // productos que se enviaran al sheet
+        statusSheet: false // se muestra el sheet o no
       }
     },
-    destroyed () {
+    destroyed () { // cuando se cambia la ruta o cuando se recarga la pagina
 		  this.$store.commit('resetProductsPagination');
     },
     computed: {
 		  products () {
-		    return this.$store.state.shopModule.products;
+		    return this.$store.state.shopModule.products; // accede a todos los productos
       },
       limit () {
-		    return this.$store.state.shopModule.limit;
+		    return this.$store.state.shopModule.limit; // accede al limit de elementos a cargar
       }
     },
     methods: {
-		  openSheet (product) {
-		    this.productSheet = product;
-		    this.statusSheet = true;
-		    this.$store.commit('setActiveProductInCart', product);
+		  openSheet (product) { // abre elsheet y pasa la informacion necesaria para que muestre la imagen del producto, asi como la cantidad
+		    this.productSheet = product; // producto a mostrar
+		    this.statusSheet = true; // mostrar sheet
+		    this.$store.commit('setActiveProductInCart', product); // establece el producto seleccionado en el state
       },
-      fetchProducts () {
-		    if ( !this.$store.state.shopModule.finish) {
-		      this.loading = true;
+      fetchProducts () { // obtener productos que salen de la tienda
+		    if ( !this.$store.state.shopModule.finish) { // si todavia hay productos por cargar
+		      this.loading = true; // muestra el loading
 		      setTimeout(() => {
-		        this.$store.dispatch('fetchAllProductsPaginate').then(() => {
+		        this.$store.dispatch('fetchAllProductsPaginate').then(() => { // agrega los productos a la pagina
 		          this.loading = false;
             })
           }, 2000);
         }
       },
-      changeLimit (limit) {
-		    if ( this.limit !== limit) {
-		      this.$store.commit('resetProductsPagination');
-		      this.$store.commit('updateLimitProductsPaginate', limit);
-		      this.fetchProducts();
+      changeLimit (limit) { // cambia el limite de paginacion, productos por carga
+		    if ( this.limit !== limit) { // siel limite establecido en el state es diferente
+		      this.$store.commit('resetProductsPagination'); // resetea los productos mostrados en la tabla y en el state
+		      this.$store.commit('updateLimitProductsPaginate', limit); // actualiza el limte en el state
+		      this.fetchProducts(); // agrega productos a la tabla
         }
       },
-      closeSheet () {
+      closeSheet () { // cierra el sheet
 		    this.statusSheet = false;
       }
     }
